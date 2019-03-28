@@ -1,6 +1,7 @@
 package impl;
 
-import gamedingen.Element;
+
+import game.Element;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 

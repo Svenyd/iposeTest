@@ -1,6 +1,7 @@
 package impl;
 
-import behaviourdingen.Behavior;
+
+import behavior.Behavior;
 import javafx.scene.input.MouseEvent;
 
 

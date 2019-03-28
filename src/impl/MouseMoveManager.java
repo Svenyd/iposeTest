@@ -1,7 +1,8 @@
 package impl;
 
-import behaviourdingen.BehaviorManager;
-import gamedingen.Element;
+
+import behavior.BehaviorManager;
+import game.Element;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;

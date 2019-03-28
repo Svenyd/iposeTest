@@ -1,15 +1,22 @@
-import enginedingen.Engine;
 
-import enginedingen.GameLoader;
-import gamedingen.Element;
-import gamedingen.Game;
-import gamedingen.Level;
-import gamedingen.Tile;
+import engine.Engine;
+import engine.GameLoader;
+import game.Element;
+import game.Game;
+import game.Tile;
 import impl.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import service.FirebaseService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Main extends Application {
@@ -18,28 +25,58 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GameLoader gameLoader = new GameLoader();
-        HashMap<Integer, Class<? extends Tile>> tileHashMap = new HashMap<>();
-        tileHashMap.put(0,WaterTile.class);
-        tileHashMap.put(1, SandTile.class);
-        gameLoader.addTileConfiguration(tileHashMap);
-        HashMap<Integer, Class<? extends Element>> elementHashMap = new HashMap<>();
+
+        FirebaseService firebaseService = new FirebaseService();
+        firebaseService.saveAchievement("groep2","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODQ3MTEyNDQsInYiOjAsImlhdCI6MTU1Mzc3MzYzMiwiZCI6eyJ1aWQiOiI1NDdmZTAyNS00Y2RjLTRjYjgtYTQ4OS1mNDdlZWI4MWJlMWUifX0.mfcK6Dxrtqo1UzXX_nur684nUkBzFTYfEpkUqnxEAfM","test");
+
+        Button startGameButton = new Button("Start Game");
+        Button highScoreButton = new Button("Highscores");
+        startGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GameLoader gameLoader = new GameLoader();
+
+                HashMap<Integer, Class<? extends Tile>> tileHashMap = new HashMap<>();
+                tileHashMap.put(0,WaterTile.class);
+                tileHashMap.put(1, SandTile.class);
+                gameLoader.addTileConfiguration(tileHashMap);
+
+                HashMap<Integer, Class<? extends Element>> elementHashMap = new HashMap<>();
+                elementHashMap.put(0, Link.class);
+//              elementHashMap.put(0, MouseCursor.class);
+                gameLoader.addElementsConfiguration(elementHashMap);
+
+                gameLoader.addLevel(1,"resources/level1Tiles.txt","resources/level1Elements.txt");
+
+                Game game = gameLoader.load();
+
+                game.getLevels().get(0).setFocusedElement(game.getLevels().get(0).getElements().get(0));
+                game.setActiveLevel(game.getLevels().get(0));
+
+                Engine engine = new Engine(game);
+                engine.addBehavior(MoveOnMouseMove.class,new MouseMoveManager());
+                engine.start(primaryStage);
+            }
+        });
 
 
-        elementHashMap.put(0, Link.class);
-//        elementHashMap.put(0, MouseCursor.class);
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(startGameButton,highScoreButton);
 
-        gameLoader.addElementsConfiguration(elementHashMap);
-        gameLoader.addLevel(1,"resources/level1Tiles.txt","resources/level1Elements.txt");
 
-        Game game = gameLoader.load();
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(vBox);
+        Scene scene = new Scene(borderPane);
 
-        game.getLevels().get(0).setFocusedElement(game.getLevels().get(0).getElements().get(0));
-        game.setActiveLevel(game.getLevels().get(0));
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-        Engine engine = new Engine(game);
-        engine.addBehavior(MoveOnMouseMove.class,new MouseMoveManager());
-        engine.start(primaryStage);
+
+
+
+
+
+
 
 
     }
