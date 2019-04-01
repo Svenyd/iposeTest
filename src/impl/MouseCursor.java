@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 
 public class MouseCursor extends Element implements MoveOnMouseMove {
     public MouseCursor() {
-        super("file:resources/cursor.png");
+        super("/resources/cursor.png");
 //        super.getParent().setOnMouseMoved(new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {

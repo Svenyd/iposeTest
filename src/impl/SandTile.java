@@ -6,7 +6,7 @@ import game.Tile;
 
 public class SandTile extends Tile implements Collidable {
     public SandTile() {
-        super("file:resources/SandTile.png");
+        super("/resources/SandTile.png");
     }
 
     @Override

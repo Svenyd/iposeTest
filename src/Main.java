@@ -26,36 +26,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FirebaseService firebaseService = new FirebaseService();
-        firebaseService.saveAchievement("groep2","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODQ3MTEyNDQsInYiOjAsImlhdCI6MTU1Mzc3MzYzMiwiZCI6eyJ1aWQiOiI1NDdmZTAyNS00Y2RjLTRjYjgtYTQ4OS1mNDdlZWI4MWJlMWUifX0.mfcK6Dxrtqo1UzXX_nur684nUkBzFTYfEpkUqnxEAfM","test");
 
         Button startGameButton = new Button("Start Game");
         Button highScoreButton = new Button("Highscores");
+
         startGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GameLoader gameLoader = new GameLoader();
-
-                HashMap<Integer, Class<? extends Tile>> tileHashMap = new HashMap<>();
-                tileHashMap.put(0,WaterTile.class);
-                tileHashMap.put(1, SandTile.class);
-                gameLoader.addTileConfiguration(tileHashMap);
-
-                HashMap<Integer, Class<? extends Element>> elementHashMap = new HashMap<>();
-                elementHashMap.put(0, Link.class);
-//              elementHashMap.put(0, MouseCursor.class);
-                gameLoader.addElementsConfiguration(elementHashMap);
-
-                gameLoader.addLevel(1,"resources/level1Tiles.txt","resources/level1Elements.txt");
-
-                Game game = gameLoader.load();
-
-                game.getLevels().get(0).setFocusedElement(game.getLevels().get(0).getElements().get(0));
-                game.setActiveLevel(game.getLevels().get(0));
-
-                Engine engine = new Engine(game);
-                engine.addBehavior(MoveOnMouseMove.class,new MouseMoveManager());
-                engine.start(primaryStage);
+                startGame(primaryStage);
             }
         });
 
@@ -72,12 +50,30 @@ public class Main extends Application {
         primaryStage.show();
 
 
+    }
 
+    private void startGame(Stage primaryStage){
+        GameLoader gameLoader = new GameLoader();
 
+        HashMap<Integer, Class<? extends Tile>> tileHashMap = new HashMap<>();
+        tileHashMap.put(0,WaterTile.class);
+        tileHashMap.put(1, SandTile.class);
+        gameLoader.addTileConfiguration(tileHashMap);
 
+        HashMap<Integer, Class<? extends Element>> elementHashMap = new HashMap<>();
+        elementHashMap.put(0, Link.class);
+//              elementHashMap.put(0, MouseCursor.class);
+        gameLoader.addElementsConfiguration(elementHashMap);
 
+        gameLoader.addLevel(1,"/resources/level1Tiles.txt","/resources/level1Elements.txt");
 
+        Game game = gameLoader.load();
 
+        game.getLevels().get(0).setFocusedElement(game.getLevels().get(0).getElements().get(0));
+        game.setActiveLevel(game.getLevels().get(0));
 
+        Engine engine = new Engine(game);
+        engine.addBehavior(MoveOnMouseMove.class,new MouseMoveManager());
+        engine.start(primaryStage);
     }
 }

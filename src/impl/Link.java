@@ -13,7 +13,7 @@ public class Link extends Element implements Collidable, KeyBehavior {
     private double deltaX;
 
     public Link() {
-        super("file:resources/Link.png");
+        super("/resources/Link.png");
         this.deltaY = 0;
         this.deltaX = 0;
     }
